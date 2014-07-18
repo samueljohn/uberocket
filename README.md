@@ -1,7 +1,7 @@
 uberocket
 =========
 
-This is going to be a small python deploy script for <uberspace.de> hosting, which will pull a git repo and trigger a pelican run.
+This is going to be a small python deploy script for uberspace.de hosting, which will pull a git repo and trigger a pelican run.
 
 Not yet ready for anything. Beware.
 
