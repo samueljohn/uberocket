@@ -1,10 +1,10 @@
-#!/usr/bin/env python
-#-*- coding:utf-8 -*-
+#!/usr/bin/env python3
+# Based on the work of https://gist.github.com/FiloSottile/7634541
 
-import BaseHTTPServer
+import http.server
 import sys
 import time
-import urlparse
+import urllib.parse
 import json
 
 
@@ -14,10 +14,15 @@ PORT_NUMBER = int(sys.argv[2])
 
 def handle_hook(payload):
     pass
+    # - todo -
+    # git pull
+    # git submodule update? or what?
+    # pelican run (this can be done inside python from here)
 
 
-class HookHandler(BaseHTTPServer.BaseHTTPRequestHandler):
-    server_version = "HookHandler/0.1"
+class HookHandler(http.server.BaseHTTPRequestHandler):
+    server_version = "HookHandler/0.2"
+
     def do_GET(s):
         s.send_response(200)
         s.wfile.write('Hello!')
@@ -25,11 +30,15 @@ class HookHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     def do_POST(s):
         # Check that the IP is within the GH ranges
         if not any(s.client_address[0].startswith(IP)
-                   for IP in ('192.30.252', '192.30.253', '192.30.254', '192.30.255')):
+                   for IP in ('192.30.252',
+                              '192.30.253',
+                              '192.30.254',
+                              '192.30.255',
+                              '127.0.0.1')):
             s.send_error(403)
 
         length = int(s.headers['Content-Length'])
-        post_data = urlparse.parse_qs(s.rfile.read(length).decode('utf-8'))
+        post_data = urllib.parse.parse_qs(s.rfile.read(length).decode('utf-8'))
         payload = json.loads(post_data['payload'][0])
 
         handle_hook(payload)
@@ -38,12 +47,12 @@ class HookHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
 
 if __name__ == '__main__':
-    server_class = BaseHTTPServer.HTTPServer
+    server_class = http.server.HTTPServer
     httpd = server_class((HOST_NAME, PORT_NUMBER), HookHandler)
-    print time.asctime(), "Server Starts - %s:%s" % (HOST_NAME, PORT_NUMBER)
+    print((time.asctime(), "Server Starts - %s:%s" % (HOST_NAME, PORT_NUMBER)))
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
         pass
     httpd.server_close()
-    print time.asctime(), "Server Stops - %s:%s" % (HOST_NAME, PORT_NUMBER)
+    print((time.asctime(), "Server Stops - %s:%s" % (HOST_NAME, PORT_NUMBER)))
