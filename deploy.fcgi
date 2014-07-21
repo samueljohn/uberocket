@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # Based on the work of https://gist.github.com/FiloSottile/7634541
 
-from . import flipflop
+import sys
+sys.path.insert(0, '')
+import flipflop
 from cgi import escape
 import json
 
