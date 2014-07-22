@@ -21,6 +21,7 @@ def app(environ, start_response):
 
 
 if __name__ == '__main__':
+    print("Starting fcgi server ...")
     flipflop.WSGIServer(app).run()
 
     # - todo -
