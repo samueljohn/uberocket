@@ -5,6 +5,8 @@ import sys
 sys.path.insert(0, '')
 import flipflop
 from cgi import escape
+import cgitb
+cgitb.enable()
 import json
 
 
