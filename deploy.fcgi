@@ -2,11 +2,9 @@
 # Based on the work of https://gist.github.com/FiloSottile/7634541
 
 import sys
-sys.path.insert(0, '')
+sys.path.insert(0, '')  # to import local flipflop module
 import flipflop
 from cgi import escape
-import cgitb
-cgitb.enable()
 import json
 
 
